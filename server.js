@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
+const userRouter = require('./routers/userRouter');
+
 const config = require('./config');
 
 mongoose.connect('mongodb://localhost:27017/forget-me-knot', {useNewUrlParser: true})
@@ -26,7 +28,7 @@ server.use(
       cookie: { maxAge: 1 * 24 * 60 * 60 * 1000 },
       secure: false,
       httpOnly: true,
-      name: "quilly-sessions",
+      name: 'forget-me-knot-sessions',
       resave: false,
       saveUninitialized: false,
       store: new MongoStore({
@@ -40,7 +42,8 @@ server.use(
       res.json({ 'Forget me knot api': 'running'})
   });
 
+  server.use('/user', userRouter);
+
   server.listen(config.port, () => {
       console.log(`API running on port ${config.port}`);
   });
-
