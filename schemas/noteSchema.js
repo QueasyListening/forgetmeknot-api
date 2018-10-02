@@ -20,9 +20,11 @@ const noteSchema = new Schema(
         }
     }
 )
-
+// @TODO Fix this so it only updates last modified if the note is changed 
 noteSchema.pre('save', function(next) {
-    this.lastModified = Date.now();
+    if (this.isModified()){
+        this.lastModified = Date.now();
+    }
     next();
 });
 
