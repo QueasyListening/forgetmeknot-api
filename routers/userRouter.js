@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const userSchema = require('../schemas/userSchema');
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
+const noteRouter = require('./noteRouter');
+
+router.use('/notes', noteRouter);
 
 router.get('/', (req, res) => {
     User

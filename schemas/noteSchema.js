@@ -7,14 +7,23 @@ const noteSchema = new Schema(
             type: String,
             required: true
         },
-        test: {
+        text: {
             type: String
         },
         dateCreate: {
             type: Date,
             default: Date.now
+        },
+        lastModified: {
+            type:Date,
+            default: Date.now
         }
     }
 )
+
+noteSchema.pre('save', function(next) {
+    this.lastModified = Date.now();
+    next();
+});
 
 module.exports = noteSchema;
