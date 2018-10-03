@@ -1,5 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -21,6 +22,8 @@ const server = express();
 // use middleware
 server.use(express.json());
 server.use(helmet());
+server.use(cors(config.corsOptions));
+server.options('*', cors(config.corsOptions));
 
 server.use(
     session({

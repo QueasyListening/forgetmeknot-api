@@ -56,7 +56,7 @@ router.post('/login', (req, res) => {
             req.session.userId = user._id;
             req.session.username = user.username;
             req.session.password = user.password;
-            res.status(200).json({ msg: 'User successfully logged in' });
+            res.status(200).json({ msg: 'User successfully logged in', user });
         } else {
             res.status(400).json({ error: 'Username or passord incorrect' });
         }

@@ -8,7 +8,7 @@ const Note = mongoose.model('Note', noteSchema);
 const userSchema = require('../schemas/userSchema');
 const User = mongoose.model('User', userSchema);
 
-router.post('/add', (req, res) => {
+router.post('/', (req, res) => {
     if (!req.body.note.title) {
         res.status(400).json({ error: 'Title required for new note' });
     } else {
@@ -54,12 +54,12 @@ router.delete('/:noteId', (req, res) => {
             res.status(200).json({ msg: 'Note has been successfully deleted', response });
         })
         .catch(error => {
-            res.status(500).json({ msg: 'Note could not be deleted at this time', error });
+            res.status(500).json({ error: 'Note could not be deleted at this time' });
         });
     });
 });
 
-router.put('/update/:noteId', (req, res) => {
+router.put('/:noteId', (req, res) => {
     User
     .findById(req.session.userId)
     .then(user => {
@@ -77,11 +77,11 @@ router.put('/update/:noteId', (req, res) => {
             res.status(200).json({ msg: 'Note successfully updated', user })
         })
         .catch(error => {
-            res.status(500).json({ msg: 'Could not update note at this time', error })
+            res.status(500).json({ errror: 'Could not update the user at this time' })
         });
     })
     .catch(error => {
-        res.status(500).json({ msg: 'Could not update note at this time', error })
+        res.status(500).json({ error: 'Could not update note at this time' })
     });
 });
 
