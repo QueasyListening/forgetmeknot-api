@@ -47,23 +47,35 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
+    if (req.session.userId) {
+        User
+        .findById(req.session.userId)
+        .select('-password')
+        .then(user => {
+            res.status(200).json(user);
+        })
+        .catch(error => {
+            res.status(500).json({ error: 'Could not retrieve user' });
+        });
+    } else {
+        const { username, password } = req.body;
 
-    User
-    .findOne({ username })
-    .then(user => {
-        if (user.isPasswordValid(password)) {
-            req.session.userId = user._id;
-            req.session.username = user.username;
-            req.session.password = user.password;
-            res.status(200).json({ msg: 'User successfully logged in', user });
-        } else {
-            res.status(400).json({ error: 'Username or passord incorrect' });
-        }
-    })
-    .catch(error => {
-        res.status(500).json({ error: 'Could not login user' });
-    });
+        User
+        .findOne({ username })
+        .then(user => {
+            if (user.isPasswordValid(password)) {
+                req.session.userId = user._id;
+                req.session.username = user.username;
+                req.session.password = user.password;
+                res.status(200).json({ msg: 'User successfully logged in', user });
+            } else {
+                res.status(400).json({ error: 'Username or passord incorrect' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ error: 'Could not login user' });
+        });
+    }
 });
 
 router.put('/update', (req, res) => {

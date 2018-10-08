@@ -9,10 +9,11 @@ const userSchema = require('../schemas/userSchema');
 const User = mongoose.model('User', userSchema);
 
 router.post('/', (req, res) => {
-    if (!req.body.note.title) {
+    console.log(req.body);
+    if (!req.body.title) {
         res.status(400).json({ error: 'Title required for new note' });
     } else {
-        const newNote = new Note(req.body.note);
+        const newNote = new Note(req.body);
         User
         .findById(req.session.userId)
         .then(user => {
@@ -46,7 +47,6 @@ router.delete('/:noteId', (req, res) => {
     User
     .findById(req.session.userId)
     .then(user => {
-        if (user.notes.includes())
         user.notes = user.notes.filter(note => note._id.toString() !== req.params.noteId);
         user
         .save()
