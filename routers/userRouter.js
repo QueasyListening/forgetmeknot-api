@@ -78,6 +78,17 @@ router.post('/login', (req, res) => {
     }
 });
 
+router.get('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy(error => {
+            if (error) res.status(500).json({ error: 'Can not log out at this time'});
+            else res.status(200).json({ msg: 'User has been logged out' });
+        });
+    } else {
+        res.status(401).json({ msg: 'No user is logged in' });
+    }
+});
+
 router.put('/update', (req, res) => {
     const { username, password, } = req.body;
     const { userId } = req.session;
