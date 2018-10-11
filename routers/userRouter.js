@@ -28,7 +28,7 @@ router.get('/', authenticate, (req, res) => {
 router.post('/register', (req, res) => {
     const { username, password } = req.body;
     if (!username || !password ) {
-        res.status(400).json({ error: 'Username and password are required fields' });
+        res.status(400).json({ error: 'Username and password are required' });
     } else {
         User
         .findOne({ username })
