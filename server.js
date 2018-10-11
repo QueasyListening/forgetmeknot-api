@@ -9,7 +9,7 @@ const userRouter = require('./routers/userRouter');
 
 //const config = require('./config');
 
-mongoose.connect(config.db_URL || process.env.DB_URL, {useNewUrlParser: true})
+mongoose.connect(process.env.DB_URL, {useNewUrlParser: true})
         .then(() => {
             console.log('Connected to DB');
         })
@@ -35,7 +35,7 @@ server.options('*', cors({
 
 server.use(
     session({
-      secret: config.sessionSecret || process.env.SESSION_SECRET,
+      secret: process.env.SESSION_SECRET,
       cookie: { maxAge: 1 * 24 * 60 * 60 * 1000 },
       secure: false,
       httpOnly: true,
@@ -56,5 +56,5 @@ server.use(
   server.use('/user', userRouter);
 
   server.listen(config.port, () => {
-      console.log(`API running on port ${config.port || process.env.PORT}`);
+      console.log(`API running on port ${process.env.PORT}`);
   });
