@@ -5,9 +5,16 @@ const userSchema = require('../schemas/userSchema');
 const User = mongoose.model('User', userSchema);
 const noteRouter = require('./noteRouter');
 
-router.use('/notes', noteRouter);
+// authenticate that the user is signed in
+function authenticate(req, res, next) {
+    if (req.session && req.session.userId) next();
+    else
+      res.status(400).json({ error: "You must be logged in to do this function" });
+}
 
-router.get('/', (req, res) => {
+router.use('/notes', authenticate, noteRouter);
+
+router.get('/', authenticate, (req, res) => {
     User
     .findById(req.session.userId)
     .then(user => {
@@ -89,7 +96,7 @@ router.get('/logout', (req, res) => {
     }
 });
 
-router.put('/update', (req, res) => {
+router.put('/update', authenticate, (req, res) => {
     const { username, password, } = req.body;
     const { userId } = req.session;
     const updatedData = {};
@@ -115,7 +122,7 @@ router.put('/update', (req, res) => {
     });
 });
 
-router.delete('/delete', (req, res) => {
+router.delete('/delete', authenticate, (req, res) => {
     const { userId } = req.session;
     User
     .findByIdAndRemove(userId)
