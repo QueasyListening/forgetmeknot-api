@@ -7,7 +7,7 @@ const MongoStore = require('connect-mongo')(session);
 
 const userRouter = require('./routers/userRouter');
 
-const config = require('./config');
+//const config = require('./config');
 
 mongoose.connect(config.db_URL || process.env.DB_URL, {useNewUrlParser: true})
         .then(() => {
