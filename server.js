@@ -9,7 +9,7 @@ const userRouter = require('./routers/userRouter');
 
 const config = require('./config');
 
-mongoose.connect('mongodb://localhost:27017/forget-me-knot', {useNewUrlParser: true})
+mongoose.connect(config.db_URL || process.env.DB_URL, {useNewUrlParser: true})
         .then(() => {
             console.log('Connected to DB');
         })
@@ -22,12 +22,20 @@ const server = express();
 // use middleware
 server.use(express.json());
 server.use(helmet());
-server.use(cors(config.corsOptions));
-server.options('*', cors(config.corsOptions));
+server.use(cors({
+    origin: process.env.CLIENTURL || 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200
+  }));
+server.options('*', cors({
+    origin: process.env.CLIENTURL || 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200
+  }));
 
 server.use(
     session({
-      secret: config.sessionSecret,
+      secret: config.sessionSecret || process.env.SESSION_SECRET,
       cookie: { maxAge: 1 * 24 * 60 * 60 * 1000 },
       secure: false,
       httpOnly: true,
@@ -48,5 +56,5 @@ server.use(
   server.use('/user', userRouter);
 
   server.listen(config.port, () => {
-      console.log(`API running on port ${config.port}`);
+      console.log(`API running on port ${config.port || process.env.PORT}`);
   });
