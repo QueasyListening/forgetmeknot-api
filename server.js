@@ -55,6 +55,6 @@ server.use(
 
   server.use('/user', userRouter);
 
-  server.listen(config.port, () => {
+  server.listen(process.env.PORT, () => {
       console.log(`API running on port ${process.env.PORT}`);
   });
