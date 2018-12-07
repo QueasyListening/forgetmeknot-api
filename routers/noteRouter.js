@@ -9,7 +9,6 @@ const userSchema = require('../schemas/userSchema');
 const User = mongoose.model('User', userSchema);
 
 router.post('/', (req, res) => {
-    console.log(req.body);
     if (!req.body.title) {
         res.status(400).json({ error: 'Title required for new note' });
     } else {
@@ -63,15 +62,13 @@ router.put('/:noteId', (req, res) => {
     User
     .findById(req.session.userId)
     .then(user => {
-        for (let i = 0; i < user.notes.length; i++) {
-            if (user.notes[i]._id.toString() === req.params.noteId) {
-                if (req.body.title)
-                    user.notes[i].title = req.body.title;
-                if (req.body.text)
-                    user.notes[i].text = req.body.text;
-                break;
-            }
-        }
+        const noteToUpdate = user.notes.find((note) => note._id.toString() === req.params.noteId);
+        if (req.body.title)
+            noteToUpdate.title = req.body.title;
+        if (req.body.text)
+            noteToUpdate.text = req.body.text;
+        if (req.body.flagColor)
+            noteToUpdate.flagColor = req.body.flagColor;
         user.save()
         .then(user => {
             res.status(200).json({ msg: 'Note successfully updated', user })

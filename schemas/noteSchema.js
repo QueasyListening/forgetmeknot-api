@@ -17,6 +17,10 @@ const noteSchema = new Schema(
         lastModified: {
             type:Date,
             default: Date.now
+        },
+        flagColor: {
+            type: String,
+            default: 'grey'
         }
     }
 )
